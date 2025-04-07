@@ -2,6 +2,8 @@
 #include "memlayout.h"
 #include "types.h"
 #include <stdint.h>
+#include "proc.h"
+#include "riscv.h"
 
 typedef uint8_t uint8;
 typedef uint64_t uint64;
@@ -19,6 +21,8 @@ extern char text_end[];
 
 long total_pages;
 long alloc_start;
+
+TrapFrame trapframe;
 
 int free_page(uint8 desc)
 {
@@ -236,6 +240,9 @@ void stats_kernel()
 void memory_init()
 {
   pages_init();
+  //copiar o endereço de trapframe para o registrador mscratch
+  w_mscratch((uint64)&trapframe);
+  trapframe.trap_stack = kalloc2(1); // Alocar espaço para a pilha de exceção
 
   printf("+------------------------------+\n");
   printf("| Início da área de alocação: %p |\n", (void *)alloc_start);

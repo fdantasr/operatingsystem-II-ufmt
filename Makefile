@@ -12,11 +12,13 @@ LDFLAGS = -nostdlib  # não usar bibliotecas padrão
 LDFLAGS += -Tkernel.ld # Corrigido para kernel.ld, que deve estar no diretório correto
 
 OBJ = boot.o \
-	    main.o \
+	  main.o \
       uart.o \
 	  perimetro.o \
 	  printf.o  \
-	  memory.o
+	  memory.o \
+	  trap_handler.o \
+	  trap.o
 
 kernel: $(OBJ)
 	$(LD) $(LDFLAGS) -o kernel $(OBJ)
